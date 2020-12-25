@@ -1,0 +1,12 @@
+# production
+flask==1.0.2
+Flask-Bootstrap4==4.0.2
+flask-wtf==0.14.3
+firebase-admin==4.5.0
+flask-login==0.4.1
+
+# development
+autopep8==1.5.4
+Flask-Testing==0.8.0
+
+

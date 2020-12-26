@@ -1,6 +1,9 @@
 """Pomodoro time main"""
-from flask import Flask, request, make_response, redirect, render_template, session
+from flask import Flask, request, make_response, redirect, render_template, session, url_for
 from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms.fields import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired
 
 
 app = Flask(__name__)
@@ -11,6 +14,21 @@ app.config['SECRET_KEY'] = 'MI LLAVE SECRETA'
 
 todos = ['Comprar café', 'Enviar solicitud de compra',
          'Entregar video a productor']
+
+
+class LoginForm(FlaskForm):
+    '''Signup form email validation pendent'''
+    username = StringField('Nombre de usuario', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Enviar')
+
+class SignupForm(LoginForm):
+    '''Signup form email validation pendent'''
+    username = StringField('Nombre de usuario', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Enviar')
+
 
 
 @app.errorhandler(404)
@@ -31,8 +49,35 @@ def index():
     user_ip = request.remote_addr
     response = make_response(redirect('/pomodoro'))
     session['user_ip'] = user_ip
-
     return response
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    '''Signup route'''
+    signup_form = SignupForm()
+    context = {
+        'signup_form': signup_form
+    }
+
+    if signup_form.validate_on_submit():
+        username = signup_form.username.data
+        return redirect(url_for('index'))
+
+    return render_template('signup.html', **context)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    '''Login route'''
+    login_form = LoginForm()
+    context = {
+        'login_form': login_form
+    }
+    if login_form.validate_on_submit():
+        return redirect(url_for('index'))
+
+    return render_template('login.html', **context)
 
 
 @app.route('/pomodoro')
@@ -47,4 +92,4 @@ def pomodoro_time():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

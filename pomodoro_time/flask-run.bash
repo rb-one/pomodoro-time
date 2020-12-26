@@ -1,5 +1,5 @@
 #!/bin/bash
-source ..//pomodoro_env/bin/activate
+source ../.venv/bin/activate
 #pip install -r requierements.txt
 
 

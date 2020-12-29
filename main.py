@@ -2,32 +2,13 @@
 from flask import request, make_response, redirect, render_template, session, url_for
 import unittest
 
-from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
-
-from _app import create_app
-
+from app import create_app
+from app.forms import SignupForm, LoginForm
 
 app = create_app()
 
 todos = ['Comprar café', 'Enviar solicitud de compra',
          'Entregar video a productor']
-
-
-class LoginForm(FlaskForm):
-    '''Signup form email validation pendent'''
-    username = StringField('Nombre de usuario', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Enviar')
-
-
-class SignupForm(LoginForm):
-    '''Signup form email validation pendent'''
-    username = StringField('Nombre de usuario', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Enviar')
 
 
 @app.errorhandler(404)

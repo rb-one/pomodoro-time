@@ -1,16 +1,15 @@
 """Pomodoro time main"""
-from flask import Flask, request, make_response, redirect, render_template, session, url_for
-from flask_bootstrap import Bootstrap
+from flask import request, make_response, redirect, render_template, session, url_for
+import unittest
+
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-import unittest
 
-app = Flask(__name__)
-bootstrap = Bootstrap(app)
+from _app import create_app
 
-app.config['SECRET_KEY'] = 'MI LLAVE SECRETA'
 
+app = create_app()
 
 todos = ['Comprar café', 'Enviar solicitud de compra',
          'Entregar video a productor']
@@ -95,6 +94,7 @@ def pomodoro_time():
 def test():
     test = unittest.TestLoader().discover('test')
     unittest.TextTestRunner().run(test)
+
 
 
 if __name__ == '__main__':

@@ -32,34 +32,6 @@ def index():
     return response
 
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    '''Signup route'''
-    signup_form = SignupForm()
-    context = {
-        'signup_form': signup_form
-    }
-
-    if signup_form.validate_on_submit():
-        username = signup_form.username.data
-        return redirect(url_for('index'))
-
-    return render_template('signup.html', **context)
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    '''Login route'''
-    login_form = LoginForm()
-    context = {
-        'login_form': login_form
-    }
-    if login_form.validate_on_submit():
-        return redirect(url_for('index'))
-
-    return render_template('login.html', **context)
-
-
 @app.route('/pomodoro')
 def pomodoro_time():
     """pomodoro board route"""

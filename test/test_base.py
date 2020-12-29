@@ -13,7 +13,6 @@ class MainTest(TestCase):
         '''test if app exist'''
         self.assertIsNotNone(current_app)
 
-
     def test_app_in_test_mode(self):
         '''test app config is TESTING'''
         self.assertTrue(current_app.config['TESTING'])
@@ -28,6 +27,9 @@ class MainTest(TestCase):
         response = self.client.get(url_for('pomodoro_time'))
         self.assert200(response)
 
+    def test_auto_blueprint_exist(self):
+        self.assertIn('auth', self.app.blueprints)
+
     def test_signup_post(self):
         '''test post form and redirect on signup'''
         fake_form = {
@@ -39,6 +41,14 @@ class MainTest(TestCase):
         response = self.client.post(url_for('signup'), data=fake_form)
         self.assert_redirects(response, url_for('index'))
 
+    def test_signup_get(self):
+        response = self.client.get(url_for('signup'))
+        self.assert200(response)
+
+    def test_auth_signup_templete(self):
+        self.client.get(url_for('auth.signup'))
+        self.assertTemplateUsed('signup.html')
+
     def test_login_post(self):
         '''test post form and redirect on login'''
         fake_form = {
@@ -49,3 +59,10 @@ class MainTest(TestCase):
         response = self.client.post(url_for('login'), data=fake_form)
         self.assert_redirects(response, url_for('index'))
 
+    def test_login_get(self):
+        response = self.client.get(url_for('login'))
+        self.assert200(response)
+
+    def test_auth_login_templete(self):
+        self.client.get(url_for('auth.login'))
+        self.assertTemplateUsed('login.html')

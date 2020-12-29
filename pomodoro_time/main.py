@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-
+import unittest
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -22,13 +22,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Enviar')
 
+
 class SignupForm(LoginForm):
     '''Signup form email validation pendent'''
     username = StringField('Nombre de usuario', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Enviar')
-
 
 
 @app.errorhandler(404)
@@ -89,6 +89,12 @@ def pomodoro_time():
         'todos': todos
     }
     return render_template('pomodoro.html', **context)
+
+
+@app.cli.command()
+def test():
+    test = unittest.TestLoader().discover('test')
+    unittest.TextTestRunner().run(test)
 
 
 if __name__ == '__main__':

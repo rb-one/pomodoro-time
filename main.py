@@ -1,9 +1,10 @@
 """Pomodoro time main"""
-from flask import request, make_response, redirect, render_template, session, url_for
+from flask import request, make_response, redirect, render_template, session
 import unittest
 
 from app import create_app
-from app.forms import SignupForm, LoginForm
+from app.firestore_services import get_users, get_pomodoros
+
 
 app = create_app()
 
@@ -36,10 +37,17 @@ def index():
 def pomodoro_time():
     """pomodoro board route"""
     user_ip = session.get('user_ip')
+    username = session.get('username')
     context = {
         'user_ip': user_ip,
-        'todos': todos
+        'pomodoros': get_pomodoros(user_id='rusbel')
     }
+
+    users = get_users()
+    for user in users:
+        print(user.id)
+        print(user.to_dict()['password'])
+
     return render_template('pomodoro.html', **context)
 
 
@@ -47,7 +55,6 @@ def pomodoro_time():
 def test():
     test = unittest.TestLoader().discover('test')
     unittest.TextTestRunner().run(test)
-
 
 
 if __name__ == '__main__':

@@ -38,11 +38,11 @@ class MainTest(TestCase):
             'password': 'password-fake'
         }
 
-        response = self.client.post(url_for('signup'), data=fake_form)
+        response = self.client.post(url_for('auth.signup'), data=fake_form)
         self.assert_redirects(response, url_for('index'))
 
     def test_signup_get(self):
-        response = self.client.get(url_for('signup'))
+        response = self.client.get(url_for('auth.signup'))
         self.assert200(response)
 
     def test_auth_signup_templete(self):
@@ -56,11 +56,11 @@ class MainTest(TestCase):
             'password': 'password-fake'
         }
 
-        response = self.client.post(url_for('login'), data=fake_form)
+        response = self.client.post(url_for('auth.login'), data=fake_form)
         self.assert_redirects(response, url_for('index'))
 
     def test_login_get(self):
-        response = self.client.get(url_for('login'))
+        response = self.client.get(url_for('auth.login'))
         self.assert200(response)
 
     def test_auth_login_templete(self):

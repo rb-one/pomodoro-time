@@ -1,6 +1,7 @@
 from flask_testing import TestCase
 from flask import current_app, url_for
 from main import app
+from app.firestore_services import get_users, get_user, get_pomodoros
 
 
 class MainTest(TestCase):
@@ -66,3 +67,15 @@ class MainTest(TestCase):
     def test_auth_login_templete(self):
         self.client.get(url_for('auth.login'))
         self.assertTemplateUsed('login.html')
+
+    def test_firestore_get_users(self):
+        users = get_users()
+        self.assertTrue(True, users)
+
+    def test_firestore_get_user(self):
+        test_user = get_user('test-user').id
+        self.assertEqual('test-user', test_user)
+
+    def test_get_pomodoros(self):
+        test_pomodoros = get_pomodoros('test-user')
+        self.assertTrue(True, test_pomodoros[0].to_dict())

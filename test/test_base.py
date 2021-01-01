@@ -1,5 +1,5 @@
 from flask_testing import TestCase
-from flask import current_app, url_for
+from flask import current_app, url_for, redirect
 from main import app
 from app.firestore_services import get_users, get_user, get_pomodoros
 
@@ -23,14 +23,21 @@ class MainTest(TestCase):
         response = self.client.get(url_for('index'))
         self.assert_redirects(response, url_for('pomodoro_time'))
 
-    def test_pomodoro_time_get(self):
-        '''test status 200 on get pomodoro_time'''
-        response = self.client.get(url_for('pomodoro_time'))
-        self.assert200(response)
-
     def test_auto_blueprint_exist(self):
         self.assertIn('auth', self.app.blueprints)
 
+    def test_pomodoro_time_logged_user_get(self):
+        '''test post form and redirect on signup'''
+        fake_form = {
+            'username': 'fake',
+            'email': 'fake@email.com',
+            'password': 'password-fake'
+        }
+        response = self.client.post(url_for('auth.signup'), data=fake_form)
+        response = self.client.get(url_for('index'))
+        self.assert_redirects(response, url_for('pomodoro_time'))
+
+    # Signup Tests
     def test_signup_post(self):
         '''test post form and redirect on signup'''
         fake_form = {
@@ -50,6 +57,7 @@ class MainTest(TestCase):
         self.client.get(url_for('auth.signup'))
         self.assertTemplateUsed('signup.html')
 
+    # Login tests
     def test_login_post(self):
         '''test post form and redirect on login'''
         fake_form = {
@@ -68,6 +76,7 @@ class MainTest(TestCase):
         self.client.get(url_for('auth.login'))
         self.assertTemplateUsed('login.html')
 
+
     def test_firestore_get_users(self):
         users = get_users()
         self.assertTrue(True, users)
@@ -79,3 +88,6 @@ class MainTest(TestCase):
     def test_get_pomodoros(self):
         test_pomodoros = get_pomodoros('test-user')
         self.assertTrue(True, test_pomodoros[0].to_dict())
+
+
+

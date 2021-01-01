@@ -1,9 +1,10 @@
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import auth
 from app.forms import SignupForm, LoginForm
-from app.firestore_services import get_user
+from app.firestore_services import get_user, user_put
 from app.models import UserModel, UserData
 
 
@@ -16,7 +17,27 @@ def signup():
     }
 
     if signup_form.validate_on_submit():
-        return redirect(url_for('index'))
+        username = signup_form.username.data
+        email = signup_form.email.data
+        password = signup_form.password.data
+
+        # get user from database (if it exists)
+        user_doc = get_user(username)
+
+        if user_doc.to_dict() is None:
+            password_hashed = generate_password_hash(password)
+            user_data = UserData(username, email, password_hashed)
+            # register user data on database
+            user_put(user_data)
+            # once registered do login
+            user = UserModel(user_data)
+            login_user(user)
+            flash(f'Welcome to pomodoro {user}')
+
+            return redirect(url_for('pomodoro_time'))
+
+        else:
+            flash('Username already exists')
 
     return render_template('signup.html', **context)
 
@@ -35,30 +56,28 @@ def login():
         form_username = login_form.username.data
         form_password = login_form.password.data
 
-        # get data from firestore
+        # get data from database
         user_doc = get_user(form_username)
 
         # Check if user exists
         if user_doc.to_dict() is not None:
-            password_from_db = user_doc.to_dict()['password']
-
+            db_password = user_doc.to_dict()['password']
             # passwords verification
-            if form_password == password_from_db:
-                user_data = UserData(form_username, password_from_db)
+            if check_password_hash(db_password, form_password):
+                email = user_doc.to_dict()['email']
+                user_data = UserData(form_username, email, db_password)
                 user = UserModel(user_data)
 
                 # login user
                 login_user(user)
-                flash('Bienvenido de nuevo')
+                flash(f'Welcome back {user}')
                 redirect(url_for('pomodoro_time'))
 
-            else:
-                flash('La informacion no coincide')
+                return redirect(url_for('index'))
 
         else:
-            flash('El usuario no existe')
+            flash('Please check your email and password again')
 
-        return redirect(url_for('index'))
 
     return render_template('login.html', **context)
 
@@ -66,6 +85,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Regresa pronto!')
+    flash('Comeback Soon!')
 
     return redirect(url_for('auth.login'))

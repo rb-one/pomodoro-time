@@ -10,6 +10,20 @@
     font-size: 26px;
 }
 
+.navbar-cointainer {
+  position: relative;
+}
+
+.navbar {
+  height: 56px;
+}
+
+.collapse-container {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
 .main-content {
     height: calc(100vh - 56px - 54px) ;
     padding: 0;

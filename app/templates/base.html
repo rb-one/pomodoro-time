@@ -13,14 +13,14 @@
     {% include "navbar.html" %}
     {% endblock navbar %}
 
-    {% for message in get_flashed_messages()  %}
-        <div class="alert alert-success allert-dismissible">
-            <button type="button" data-dismiss="alert" class="close">&times;</button>
-            {{ message  }}
-        </div>
-    {% endfor %}
-
+    
     <div class="container-fluid main-content d-flex align-items-center flex-column justify-content-center">
+        {% for message in get_flashed_messages()  %}
+            <div class="alert alert-success allert-dismissible w-100">
+                <button type="button" data-dismiss="alert" class="close">&times;</button>
+                {{ message  }}
+            </div>
+        {% endfor %}
         {% block content %}
         
         {% endblock content %}

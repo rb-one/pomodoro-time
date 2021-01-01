@@ -1,4 +1,4 @@
-<div class="cointainer-fliud pos-f-t">
+<div class="navbar-cointainer cointainer-fliud pos-f-t">
   <nav class="navbar navbar-dark bg-dark d-flex justify-space-between">
     <p class="pomodoro-logo m-0">pomodoro time!</p>
     {% if current_user.is_authenticated %}
@@ -9,7 +9,7 @@
     </button>
     {% endif %}
   </nav>
-  <div class="collapse text-right" id="navbarToggleExternalContent">
+  <div class="collapse-container collapse text-right" id="navbarToggleExternalContent">
     <div class="bg-dark p-4">
         <a class="text-white" href="{{ url_for('auth.logout') }}">Logout Session<a>
     </div>

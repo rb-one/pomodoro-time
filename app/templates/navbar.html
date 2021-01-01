@@ -1,13 +1,17 @@
 <div class="cointainer-fliud pos-f-t">
   <nav class="navbar navbar-dark bg-dark d-flex justify-space-between">
     <p class="pomodoro-logo m-0">pomodoro time!</p>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+    {% if current_user.is_authenticated %}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" 
+      data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+      aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    {% endif %}
   </nav>
   <div class="collapse text-right" id="navbarToggleExternalContent">
     <div class="bg-dark p-4">
-      <a class="text-white" href="">Cerrar Sesion</a>
+        <a class="text-white" href="{{ url_for('auth.logout') }}">Logout Session<a>
     </div>
   </div>
 </div>

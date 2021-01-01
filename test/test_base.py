@@ -45,7 +45,6 @@ class MainTest(TestCase):
             'email': 'fake@email.com',
             'password': 'password-fake'
         }
-
         response = self.client.post(url_for('auth.signup'), data=fake_form)
         self.assert_redirects(response, url_for('index'))
 
@@ -64,7 +63,6 @@ class MainTest(TestCase):
             'username': 'fake',
             'password': 'password-fake'
         }
-
         response = self.client.post(url_for('auth.login'), data=fake_form)
         self.assert_redirects(response, url_for('index'))
 
@@ -76,7 +74,19 @@ class MainTest(TestCase):
         self.client.get(url_for('auth.login'))
         self.assertTemplateUsed('login.html')
 
+    # Logout Tests
+    def test_loguth_get(self):
+        fake_form = {
+            'username': 'fake',
+            'password': 'password-fake'
+        }
+        response = self.client.post(url_for('auth.login'), data=fake_form)
+        response = self.client.get(url_for('auth.logout'))
+        url_response = response.headers['location']
+        response.headers['location'] = url_response[:url_response.find('?')]
+        self.assert_redirects(response, url_for('auth.login'))
 
+    # Firestore Tests
     def test_firestore_get_users(self):
         users = get_users()
         self.assertTrue(True, users)
@@ -88,6 +98,3 @@ class MainTest(TestCase):
     def test_get_pomodoros(self):
         test_pomodoros = get_pomodoros('test-user')
         self.assertTrue(True, test_pomodoros[0].to_dict())
-
-
-

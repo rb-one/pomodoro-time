@@ -25,10 +25,10 @@ def get_pomodoros(user_id):
 
 def user_put(user_data):
     # creates a referece for document user_id
-    user_ref = db.collection('users').document(user_data.username)
+    user_ref = db.collection('users').document(user_data.email)
     # add email and password to the user referencedata
     # creates/set user in db
     user_ref.set({
-        'email': user_data.email,
+        'username': user_data.username,
         'password': user_data.password
     })

@@ -21,14 +21,16 @@ def signup():
         email = signup_form.email.data
         password = signup_form.password.data
 
-        # get user from database (if it exists)
-        user_doc = get_user(username)
+        # get email/user_id from database (if it exists)
+        user_doc = get_user(email)
 
         if user_doc.to_dict() is None:
             password_hashed = generate_password_hash(password)
             user_data = UserData(username, email, password_hashed)
+
             # register user data on database
             user_put(user_data)
+
             # once registered do login
             user = UserModel(user_data)
             login_user(user)
@@ -45,6 +47,7 @@ def signup():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     '''Login route'''
+    no_login_message = 'Please check your email and password again'
     login_form = LoginForm()
 
     context = {
@@ -52,20 +55,20 @@ def login():
     }
 
     if login_form.validate_on_submit():
-        # get data from form
-        form_username = login_form.username.data
-        form_password = login_form.password.data
+        # Get form data
+        email = login_form.email.data
+        password = login_form.password.data
 
-        # get data from database
-        user_doc = get_user(form_username)
+        # Get data from database
+        user_doc = get_user(email)
 
-        # Check if user exists
+        # User Verification
         if user_doc.to_dict() is not None:
-            db_password = user_doc.to_dict()['password']
+            password_db = user_doc.to_dict()['password']
             # passwords verification
-            if check_password_hash(db_password, form_password):
-                email = user_doc.to_dict()['email']
-                user_data = UserData(form_username, email, db_password)
+            if check_password_hash(password_db, password):
+                username = user_doc.to_dict()['username']
+                user_data = UserData(username, email, password_db)
                 user = UserModel(user_data)
 
                 # login user
@@ -74,12 +77,13 @@ def login():
                 redirect(url_for('pomodoro_time'))
 
                 return redirect(url_for('index'))
-
+            else:
+                flash(no_login_message)
         else:
-            flash('Please check your email and password again')
-
+            flash(no_login_message)
 
     return render_template('login.html', **context)
+
 
 @auth.route('/logout')
 @login_required

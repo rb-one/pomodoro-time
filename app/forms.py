@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired
 
 class SignupForm(FlaskForm):
     '''Signup form email validation pendent'''
-    username = StringField('Nombre de usuario', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign Up')
@@ -14,7 +14,7 @@ class SignupForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     '''Signup form email validation pendent'''
-    username = StringField('Nombre de usuario', validators=[DataRequired()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 

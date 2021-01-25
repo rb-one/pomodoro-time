@@ -62,22 +62,23 @@ def signup():
 @auth.route('/confirm/<token>')
 def confirm_email(token):
     '''Confirm email route'''
-    try:
-        email = confirm_token(token)
-        user = get_user(email).to_dict()
+    email = confirm_token(token)
+    user = get_user(email).to_dict()
+    if user:
         user_data = UserData(user['username'], email, user['password'])
 
-        if user_data.confirmed:
-            flash('Account already confirmed, please login')
-        else:
+        if user_data.confirmed == False:
             user_data.confirmed = True
             user_data.confirmed_on = datetime.datetime.now()
             user_confirmed_update(user_data)
             flash('You have confirmed your account. Thanks!')
-
+            
             return redirect(url_for('auth.login'))
+        elif user_data.confirmed == True:
+            flash('Account already confirmed, please login')
 
-    except BaseException:
+
+    else:
         flash('The confirmation link is invalid or has expired.', 'danger')
 
 
@@ -122,6 +123,7 @@ def login():
                     flash('Please before Login validate your email')
             else:
                 flash(no_login_message)
+
         else:
             flash(no_login_message)
 

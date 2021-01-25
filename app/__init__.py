@@ -12,7 +12,7 @@ def load_user(username):
 
 
 def create_app():
-    '''retutns an instance of Flask Class'''
+    '''returns an instance of Flask Class'''
     app = Flask(__name__)
 
     app.config.from_object(Config)

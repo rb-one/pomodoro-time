@@ -19,12 +19,6 @@ def error_404(error):
     return render_template("404.html", error=error)
 
 
-@app.errorhandler(500)
-def internal_server_error(error):
-    '''Internal server error route'''
-    return render_template('500.html', error=error)
-
-
 @app.route('/')
 def index():
     """index route"""
@@ -55,6 +49,3 @@ def test():
     test = unittest.TestLoader().discover('test')
     unittest.TextTestRunner().run(test)
 
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)

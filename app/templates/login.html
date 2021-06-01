@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% import 'macros.html' as macros %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}
+    {{super()}} 
+    Bienvenido
+{% endblock title %}
+
+{% block content %}
+    <div class="contaier-fluid login-cointainer  d-flex flex-column align-items-center justify-content-between">
+        <div class="login-card col-11 col-md-8 col-lg-7 col-xl-6  mt-sm-5 pt-xl-5 align-items-center">
+            <div class="login-title text-center">
+                <p class="pomodoro-title mb-2">Pomodoro time!</p>
+                <div class="arrow-container">
+                    <div class="arrow-left"></div>
+                    <div class="arrow-right"></div>
+                </div>
+            </div>
+            <div class="card col-12 mt-4">
+                <div class="container mt-4">
+                    {{ wtf.quick_form(login_form,  extra_classes="login-form d-flex flex-column align-items-end ",
+                        button_map={'submit': 'btn btn-outline-success mb-3 signup-btn'})
+                     }}
+                </div>
+            </div>
+        </div>
+        <div class="tomatoes d-flex justify-content-end">
+            <img src="{{ url_for('static', filename='img/tomatoes.png') }}" alt="">
+        </div>
+   </div>
+{% endblock content %}

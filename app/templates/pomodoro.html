@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import 'macros.html' as macros %}
+
+{% block title %}
+    {{super()}} 
+    Bienvenido
+{% endblock title %}
+
+{% block content %}
+
+     {% block card %}
+       {% include "card.html" %}
+     {% endblock card %}
+
+
+     {% for pomodoro in pomodoros %}
+         {{ macros.render_pomodoros(pomodoro)}}
+     {% endfor %}
+
+ </div>
+{% endblock content %}
